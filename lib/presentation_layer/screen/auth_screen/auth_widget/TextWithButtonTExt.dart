@@ -1,0 +1,46 @@
+import 'package:clean_app/presentation_layer/resources/color_manager.dart';
+import 'package:clean_app/presentation_layer/resources/font_manager.dart';
+import 'package:clean_app/presentation_layer/resources/styles_manager.dart';
+import 'package:flutter/material.dart';
+
+class TextWithButtonTExt extends StatelessWidget {
+  const TextWithButtonTExt({
+    super.key,
+    required this.text1,
+    required this.text2,
+    this.width,
+    this.onTap,
+  });
+  final String text1, text2;
+  final double? width;
+  final void Function()? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          text1,
+          style: MangeStyles().getBoldStyle(
+            color: ColorManager.black,
+            fontSize: FontSize.s16,
+          ),
+        ),
+        SizedBox(
+          width: width ?? 10,
+        ),
+        InkWell(
+          onTap: onTap,
+          child: Text(
+            text2,
+            style: MangeStyles().getBoldStyle(
+              color: ColorManager.kPrimary2,
+              fontSize: FontSize.s16,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
