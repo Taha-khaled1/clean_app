@@ -158,7 +158,7 @@ class SupportProblemScreen extends StatelessWidget {
                             color: ColorManager.kPrimary,
                             text: AppStrings.save,
                             press: () {
-                              // controller.contactUs(context);
+                              controller.contactUs(context);
                             },
                           ),
                         );

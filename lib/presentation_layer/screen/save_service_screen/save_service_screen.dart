@@ -1,7 +1,6 @@
 import 'package:clean_app/presentation_layer/Infowidget/ui_components/info_widget.dart';
 import 'package:clean_app/presentation_layer/components/appbar1.dart';
 import 'package:clean_app/presentation_layer/components/custombutten.dart';
-import 'package:clean_app/presentation_layer/components/customtextfild.dart';
 import 'package:clean_app/presentation_layer/resources/color_manager.dart';
 import 'package:clean_app/presentation_layer/resources/font_manager.dart';
 import 'package:clean_app/presentation_layer/resources/styles_manager.dart';

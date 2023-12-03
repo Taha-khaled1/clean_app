@@ -8,6 +8,7 @@ import 'package:clean_app/presentation_layer/resources/strings_manager.dart';
 import 'package:clean_app/presentation_layer/resources/styles_manager.dart';
 import 'package:clean_app/presentation_layer/screen/account_screen/widget/customListtile.dart';
 import 'package:clean_app/presentation_layer/screen/edit_profile_screen/edit_profile_screen.dart';
+import 'package:clean_app/presentation_layer/screen/home_screen/home_controlller/home_controlller.dart';
 import 'package:clean_app/presentation_layer/screen/screenseting/aboutpage.dart';
 import 'package:clean_app/presentation_layer/screen/screenseting/privacy_policy.dart';
 import 'package:clean_app/presentation_layer/screen/screenseting/sharescreen.dart';
@@ -51,6 +52,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   titel: AppStrings.trackRequests.tr,
                   onTap: () {
+                    Get.delete<HomeController>();
                     // Get.to(() => FollowOrderScreen());
                   },
                 ),

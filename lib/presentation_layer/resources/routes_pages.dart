@@ -1,5 +1,6 @@
 import 'package:clean_app/presentation_layer/components/navbar.dart';
 import 'package:clean_app/presentation_layer/screen/auth_screen/login_screen/login_screen.dart';
+import 'package:clean_app/presentation_layer/screen/home_screen/home_screen.dart';
 import 'package:get/get.dart';
 
 List<GetPage<dynamic>>? getPage = [
@@ -11,7 +12,7 @@ List<GetPage<dynamic>>? getPage = [
   //     ]),
   GetPage(
     name: '/',
-    page: () => LoginScreen(),
+    page: () => Example(),
   ),
   // GetPage(
   //   name: Routes.PropertyDetalisScreen,

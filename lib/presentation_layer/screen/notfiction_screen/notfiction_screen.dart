@@ -1,5 +1,4 @@
 import 'package:clean_app/presentation_layer/components/appbar1.dart';
-import 'package:clean_app/presentation_layer/components/navbar.dart';
 import 'package:clean_app/presentation_layer/resources/color_manager.dart';
 import 'package:clean_app/presentation_layer/resources/font_manager.dart';
 import 'package:clean_app/presentation_layer/resources/styles_manager.dart';

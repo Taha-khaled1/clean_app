@@ -8,6 +8,7 @@ import 'package:clean_app/presentation_layer/components/navbar.dart';
 import 'package:clean_app/presentation_layer/components/show_dialog.dart';
 import 'package:clean_app/presentation_layer/resources/color_manager.dart';
 import 'package:clean_app/presentation_layer/resources/font_manager.dart';
+import 'package:clean_app/presentation_layer/resources/msnge_api.dart';
 import 'package:clean_app/presentation_layer/resources/strings_manager.dart';
 import 'package:clean_app/presentation_layer/resources/styles_manager.dart';
 import 'package:clean_app/presentation_layer/screen/auth_screen/auth_widget/DoubleDivider.dart';
@@ -21,77 +22,85 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
 
-String email = "";
+String phone = "";
 String pass = "";
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isLoad = false;
   @override
   Widget build(BuildContext context) {
-    // Future<void> login(String email, String password) async {
-    //   try {
-    //     print('fffffffffffffffffffffffffffffffffffffffffff');
-    //     // Make a post request with the email and password
-    //     final response = await http.post(
-    //       Uri.parse('https://elegantae.net/api/auth/login'),
-    //       body: {
-    //         'email': email,
-    //         'password': pass,
-    //         "user_type": "customer",
-    //         "device_token": "Device Token From Firebase"
-    //       },
-    //     );
+    Future<void> login(String phone, String password) async {
+      isLoad = true;
+      setState(() {});
+      try {
+        print('fffffffffffffffffffffffffffffffffffffffffff');
+        // Make a post request with the email and password
+        final response = await http.post(
+          Uri.parse(APiMange.login),
+          body: {
+            'phone': phone,
+            'password': pass,
+            "device_token": "Device Token From Firebase"
+          },
+        );
 
-    //     if (response.statusCode == 200) {
-    //       final message = jsonDecode(response.body)['message'];
-    //       print(response.body);
-    //       if (message == 'Incorrect Data') {
-    //         showDilog(
-    //           context,
-    //           AppStrings.invalid_credentials.tr,
-    //           type: QuickAlertType.info,
-    //           onConfirmBtnTap: () {
-    //             Get.back();
-    //           },
-    //         );
-    //       } else {
-    //         final data = jsonDecode(response.body)['data'];
+        if (response.statusCode == 200) {
+          final message = jsonDecode(response.body)['message'];
+          print(response.body);
+          if (message == 'Incorrect Data') {
+            showDilog(
+              context,
+              AppStrings.invalid_credentials.tr,
+              type: QuickAlertType.info,
+              onConfirmBtnTap: () {
+                Get.back();
+              },
+            );
+          } else {
+            final data = jsonDecode(response.body)['data'];
 
-    //         sharedPreferences.setInt('id', data['user']['id']);
-    //         sharedPreferences.setString('name', data['user']['name'] ?? "");
-    //         sharedPreferences.setString('email', data['user']['email']);
-    //         sharedPreferences.setString('phone', data['user']['phone'] ?? "");
-    //         sharedPreferences.setString(
-    //             'address', data['user']['address'] ?? "");
-    //         sharedPreferences.setString(
-    //             'profile_image', data['user']['profile_image'] ?? "");
-    //         sharedPreferences.setString('token', data['token']);
-    //         Get.offAll(() => Example());
-    //         print("==============================================");
-    //       }
-    //     } else {
-    //       print('zzzzzzzzzzzzzzzzzzzzzzzzzz');
-    //       showDilog(
-    //         context,
-    //         AppStrings.invalid_credentials.tr,
-    //         type: QuickAlertType.info,
-    //         onConfirmBtnTap: () {
-    //           Get.back();
-    //         },
-    //       );
-    //     }
-    //   } catch (e) {
-    //     print("error : $e");
-    //     showDilog(
-    //       context,
-    //       AppStrings.invalid_credentials.tr,
-    //       type: QuickAlertType.info,
-    //       onConfirmBtnTap: () {
-    //         Get.back();
-    //       },
-    //     );
-    //   }
-    // }
+            sharedPreferences.setInt('id', data['client']['id']);
+            sharedPreferences.setString('name', data['client']['name'] ?? "");
+            sharedPreferences.setString('email', data['client']['email']);
+            sharedPreferences.setString('phone', data['client']['phone'] ?? "");
+            sharedPreferences.setString(
+                'profile_image', data['client']['profile_image'] ?? "");
+            sharedPreferences.setString('token', data['access_token']);
+            Get.offAll(() => Example());
+            print("==============================================");
+          }
+        } else {
+          print('zzzzzzzzzzzzzzzzzzzzzzzzzz');
+          showDilog(
+            context,
+            AppStrings.invalid_credentials.tr,
+            type: QuickAlertType.info,
+            onConfirmBtnTap: () {
+              Get.back();
+            },
+          );
+        }
+      } catch (e) {
+        print("error : $e");
+        showDilog(
+          context,
+          AppStrings.invalid_credentials.tr,
+          type: QuickAlertType.info,
+          onConfirmBtnTap: () {
+            Get.back();
+          },
+        );
+      }
+      isLoad = false;
+      setState(() {});
+    }
 
     return Scaffold(
       backgroundColor: ColorManager.background,
@@ -130,7 +139,7 @@ class LoginScreen extends StatelessWidget {
                     valid: (p0) {},
                     onsaved: (p0) {},
                     onChanged: (p0) {
-                      email = p0.toString();
+                      phone = p0.toString();
                     },
                     titel: 'رقم الهاتف',
                     width: 15,
@@ -175,19 +184,21 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CustomButton(
-                    width: deviceInfo.localWidth * 0.8,
-                    haigh: 60,
-                    color: ColorManager.kPrimary,
-                    text: 'تسجيل الدخول',
-                    press: () {
-                      if (email.isNotEmpty && pass.isNotEmpty) {
-                        // login(email, pass);
-                      }
-
-                      Get.to(() => Example());
-                    },
-                  ),
+                  isLoad == true
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : CustomButton(
+                          width: deviceInfo.localWidth * 0.8,
+                          haigh: 60,
+                          color: ColorManager.kPrimary,
+                          text: 'تسجيل الدخول',
+                          press: () {
+                            if (phone.isNotEmpty && pass.isNotEmpty) {
+                              login(phone, pass);
+                            }
+                          },
+                        ),
                   DoubleDivider(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

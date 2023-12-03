@@ -7,6 +7,7 @@ import 'package:clean_app/presentation_layer/components/navbar.dart';
 import 'package:clean_app/presentation_layer/components/show_dialog.dart';
 import 'package:clean_app/presentation_layer/resources/color_manager.dart';
 import 'package:clean_app/presentation_layer/resources/font_manager.dart';
+import 'package:clean_app/presentation_layer/resources/msnge_api.dart';
 import 'package:clean_app/presentation_layer/resources/styles_manager.dart';
 import 'package:clean_app/presentation_layer/screen/auth_screen/auth_widget/TextWithButtonTExt.dart';
 import 'package:clean_app/presentation_layer/screen/auth_screen/login_screen/login_screen.dart';
@@ -30,6 +31,7 @@ class _SiginupScreenState extends State<SiginupScreen> {
 // 2. Create variables to hold the form data
   String? _name;
   String? _email;
+  String? _phone;
   String? _password;
   String? _passwordConfirmation;
   bool isload = false;
@@ -93,6 +95,23 @@ class _SiginupScreenState extends State<SiginupScreen> {
                     width: 15,
                     height: 100,
                     icon: Icons.person,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextfeild(
+                    valid: (value) {
+                      if (value!.isEmpty) return 'Please enter an phone';
+                      // You can add more validation for email format
+                      return null;
+                    },
+                    onsaved: (value) {
+                      _phone = value;
+                    },
+                    titel: 'رقم الهاتف',
+                    width: 15,
+                    height: 100,
+                    icon: Icons.phone,
                   ),
                   SizedBox(
                     height: 20,
@@ -163,15 +182,15 @@ class _SiginupScreenState extends State<SiginupScreen> {
                               bool isRegistered = await registerUser(
                                 name: _name!,
                                 email: _email!,
+                                phone: _phone!,
                                 password: _password!,
                                 passwordConfirmation: _passwordConfirmation!,
-                                userType:
-                                    'customer', // This is static as per your API spec
                               );
-
+                              isload = false;
+                              setState(() {});
                               if (isRegistered) {
                                 print('Successfully registered!');
-                                // Get.offAll(() => Example());
+                                Get.offAll(() => Example());
                               } else {
                                 isload = false;
                                 setState(() {});
@@ -210,15 +229,15 @@ class _SiginupScreenState extends State<SiginupScreen> {
   Future<bool> registerUser({
     required String name,
     required String email,
+    required String phone,
     required String password,
     required String passwordConfirmation,
-    required String userType,
   }) async {
     isload = true;
     setState(() {});
-    final String url = 'https://elegantae.net/api/auth/register';
+
     final response = await http.post(
-      Uri.parse(url),
+      Uri.parse(APiMange.register),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -226,27 +245,31 @@ class _SiginupScreenState extends State<SiginupScreen> {
       body: jsonEncode({
         'name': name,
         'email': email,
+        'phone': phone,
         'password': password,
         'password_confirmation': passwordConfirmation,
-        'user_type': userType,
+        "emirate_id": 1,
+        "device_token": "Device Token From Firebase",
+        "device_type": "ios"
       }),
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body)['data'];
 
-      sharedPreferences.setInt('id', data['user']['id']);
-      sharedPreferences.setString('name', data['user']['name']);
-      sharedPreferences.setString('email', data['user']['email']);
-      sharedPreferences.setString('phone', data['user']['Number']);
-      sharedPreferences.setString('address', data['user']['address'] ?? "");
+      sharedPreferences.setInt('id', data['client']['id']);
+      sharedPreferences.setString('name', data['client']['name'] ?? "");
+      sharedPreferences.setString('email', data['client']['email']);
+      sharedPreferences.setString('phone', data['client']['phone'] ?? "");
       sharedPreferences.setString(
-          'profile_image', data['user']['profile_image'] ?? "");
-      sharedPreferences.setString('token', data['token']);
+          'profile_image', data['client']['profile_image'] ?? "");
+      sharedPreferences.setString('token', data['access_token']);
+
       return true;
     } else {
       print('Registration failed with status: ${response.statusCode}.');
       print('Error body: ${response.body}.');
+
       return false;
     }
   }
