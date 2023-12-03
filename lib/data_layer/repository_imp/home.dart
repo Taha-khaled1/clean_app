@@ -21,10 +21,10 @@ dynamic getBannnerRespon() async {
   return respons;
 }
 
-dynamic getSingleServicesRespon() async {
+dynamic getSingleServicesRespon(String id) async {
   Curd curd = Curd();
   var respons = await curd.getrequest(
-    "${APiMange.singleServices}/1",
+    "${APiMange.singleServices}/$id",
   );
 
   return respons;

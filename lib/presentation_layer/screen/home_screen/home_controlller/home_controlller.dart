@@ -31,6 +31,7 @@ class HomeController extends GetxController {
               image: bannerModel!.data?[i].bannerImage ?? "",
             ),
           );
+        return StatusRequest.success;
       } else {
         return StatusRequest.failure;
       }

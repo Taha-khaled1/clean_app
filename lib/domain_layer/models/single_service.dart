@@ -1,14 +1,14 @@
-class SingleService {
+class SingleServiceModel {
   bool? success;
   int? code;
   Null? direct;
   String? message;
   Data? data;
 
-  SingleService(
+  SingleServiceModel(
       {this.success, this.code, this.direct, this.message, this.data});
 
-  SingleService.fromJson(Map<String, dynamic> json) {
+  SingleServiceModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     code = json['code'];
     direct = json['direct'];
@@ -31,6 +31,7 @@ class SingleService {
 
 class Data {
   int? id;
+  String? icon;
   String? title;
   String? description;
   int? pricePerHour;
@@ -39,6 +40,7 @@ class Data {
 
   Data(
       {this.id,
+      this.icon,
       this.title,
       this.description,
       this.pricePerHour,
@@ -47,6 +49,7 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    icon = json['icon'];
     title = json['title'];
     description = json['description'];
     pricePerHour = json['price_per_hour'];
@@ -57,6 +60,7 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['icon'] = this.icon;
     data['title'] = this.title;
     data['description'] = this.description;
     data['price_per_hour'] = this.pricePerHour;
